@@ -1,11 +1,9 @@
-import { createRenderer } from './renderer.js'
-import { createElement, setTextContent, insert } from './browser.js'
-import { setInstance, getInstance } from './instance'
-import { unmount, onMounted } from './lifeCycle'
+import { createParser } from './parser.js'
+import { createOptimizeParser, getCurrentContext } from './optimizeParser.js'
+import dump from './dump.js'
 
 export {
-    createRenderer,
-    createElement, setTextContent, insert,
-    setInstance, getInstance,
-    unmount, onMounted
+    createParser,
+    createOptimizeParser, getCurrentContext,
+    dump
 }
