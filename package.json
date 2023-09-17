@@ -20,12 +20,12 @@
   },
   "keywords": [
     "vue",
-    "renderer",
-    "achieve-renderer"
+    "compiler",
+    "achieve-compiler"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zxn288912/npm-work-achieve-renderer.git"
+    "url": "https://github.com/zxn2889/npm-work-achieve-compiler.git"
   },
   "author": "Spade A",
   "license": "ISC",
