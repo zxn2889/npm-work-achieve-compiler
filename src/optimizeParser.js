@@ -1,3 +1,4 @@
+import { transformTextJsNode, transformElementJsNode, transformRootJsNode } from './transformer.js'
 let currentContext = null
 
 // 优化模板 AST
@@ -8,7 +9,7 @@ function optimizeParser(ast, funcs = []) {
         currentNode: null,
         childIndex: null, // 当前节点在父节点中的子节点
         parentNode: null,
-        funcs,
+        funcs: [transformTextJsNode, transformElementJsNode, transformRootJsNode].concat(funcs),
         removeASTNode: () => setRemoveASTNode.call(context),
         replaceASTNode: (node) => setReplaceASTNode.call(context, node)
     }
@@ -28,9 +29,13 @@ function traverseNode(ast, context) {
     const node = ast
     const funcs = context.funcs
     
+    const callBackFunc = []
     if (funcs.length) {
         for (let i = 0; i < funcs.length; i++) {
-            funcs[i](node, context)
+            const fun = funcs[i](node, context)
+            if (fun) {
+                callBackFunc.push(fun)
+            }
             if (!node) return
         }
     }
@@ -41,6 +46,12 @@ function traverseNode(ast, context) {
             context.childIndex = i
             context.parentNode = node
             traverseNode(child[i], context)
+        }
+    }
+
+    if (callBackFunc.length) {
+        for (let i = 0; i < callBackFunc.length; i++) {
+            callBackFunc[i]();
         }
     }
 }
