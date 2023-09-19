@@ -1,4 +1,5 @@
 import { transformTextJsNode, transformElementJsNode, transformRootJsNode } from './transformer.js'
+
 let currentContext = null
 
 // 优化模板 AST
@@ -50,7 +51,7 @@ function traverseNode(ast, context) {
     }
 
     if (callBackFunc.length) {
-        for (let i = 0; i < callBackFunc.length; i++) {
+        for (let i = callBackFunc.length - 1; i >= 0; i--) {
             callBackFunc[i]();
         }
     }
