@@ -1,16 +1,62 @@
+enum JsNodeType {
+    FunctionDecl,
+    Identifier,
+    ReturnStatement,
+    CallExpression,
+    TagNode,
+    ArrayParamsNode,
+    Text,
+    Root
+}
+
+enum FunctionName {
+    Render = 'render',
+    H = 'h'
+}
+
+interface FunctionNameNode {
+    type: JsNodeType.Identifier,
+    name: FunctionName
+}
+
+interface FunctionBodyNode {
+    type: JsNodeType.ReturnStatement,
+    return: HAstNode
+}
+
+interface RenderAstNode {
+    type: JsNodeType,
+    id: FunctionNameNode,
+    params: Array<[]>,
+    body: Array<FunctionBodyNode>
+}
+
+interface HNodesNode {
+    type: JsNodeType,
+    name?: string,
+    params?: Array<HAstNode>,
+    context?: string
+}
+
+interface HAstNode {
+    type: JsNodeType.CallExpression,
+    id: FunctionNameNode,
+    nodes: Array<HNodesNode>
+}
+
 // 创建 render 函数
-function transformRender(ast) {
-    if (ast.type !== 'FunctionDecl') return
+function transformRender(ast: RenderAstNode): string {
+    if (ast.type !== JsNodeType.FunctionDecl) return
     
-    let render = ''
+    let render: string = ''
 
     // 设置函数关键字
-    if (ast.type === 'FunctionDecl') {
+    if (ast.type === JsNodeType.FunctionDecl) {
         render += 'function'
     }
 
     // 设置函数名称
-    if (ast.id.type === 'Identifier') {
+    if (ast.id.type === JsNodeType.Identifier) {
         render += ` ${ast.id.name}`
     }
 
@@ -24,7 +70,7 @@ function transformRender(ast) {
     // 设置函数体
     if (ast.body.length) {
         if (ast.body.length === 1) {
-            if (ast.body[0].type === 'ReturnStatement') {
+            if (ast.body[0].type === JsNodeType.ReturnStatement) {
                 render += `{ return ${transformH(ast.body[0].return)} }`
             }
         }
@@ -37,13 +83,13 @@ function transformRender(ast) {
 }
 
 // 创建要被调用的 h 函数
-function transformH(ast) {
-    if (ast.type !== 'CallExpression') return
+function transformH(ast: HAstNode): string {
+    if (ast.type !== JsNodeType.CallExpression) return
 
-    let h = ''
+    let h: string = ''
 
     // 设置要调用的 h 函数名
-    if (ast.id.type === 'Identifier') {
+    if (ast.id.type === JsNodeType.Identifier) {
         h += ast.id.name
     }
 
@@ -60,19 +106,19 @@ function transformH(ast) {
                 const node = ast.nodes[i];
 
                 // 设置 h 函数的第一个参数-元素名
-                if (node.type === 'TagNode') {
+                if (node.type === JsNodeType.TagNode) {
                     h += `('${node.name}'`
                 }
                 // 设置 h 函数的第二个参数
                 // 如果是数组则说明包含 h 函数，循环遍历
-                else if (node.type === 'ArrayParamsNode') {
+                else if (node.type === JsNodeType.ArrayParamsNode) {
                     h += ', ['
 
                     // 如果数组有值，则递归调用 transformH 函数
                     if (node.params.length) {
                         for (let j = 0; j < node.params.length; j++) {
                             const jNode = node.params[j];
-                            if (jNode.type === 'CallExpression') {
+                            if (jNode.type === JsNodeType.CallExpression) {
                                 h += `${transformH(jNode)}${j !== node.params.length - 1 ? ', ' : ''}`
                             }
                         }
@@ -80,7 +126,7 @@ function transformH(ast) {
                     h += ']'
                 }
                 // 如果为文本节点，则直接作为第二个参数
-                else if (node.type === 'Text') {
+                else if (node.type === JsNodeType.Text) {
                     h += `, ${node.context}`
                 }
             }
@@ -94,8 +140,14 @@ function transformH(ast) {
     return h
 }
 
+interface AstNode {
+    type: JsNodeType.Root,
+    children: any,
+    jsNode: RenderAstNode
+}
+
 // 对转换器结果进行判断，并着手拼接目标代码
-function transformJsNode(ast) {
+function transformJsNode(ast: AstNode) {
     if (!('jsNode' in ast)) {
         console.warn('当前代码未经转换器转换');
         return
@@ -105,7 +157,7 @@ function transformJsNode(ast) {
 }
 
 // 创建目标代码生成器
-function createGenerator(ast) {
+function createGenerator(ast: AstNode) {
     return transformJsNode(ast)
 }
 

@@ -1,11 +1,7 @@
-enum Type {
-    Root,
-    Element,
-    Text
-}
+import { NodeType } from './common'
 
 interface Node {
-    type: Type,
+    type: NodeType,
     tag?: string,
     children?: Array<Node>,
     content?: string
@@ -14,9 +10,9 @@ interface Node {
 // 打印模板 AST 树
 export default function dump(node: Node, indent: number = 0): void {
     const type = node.type
-    const desc = type === Type.Root
+    const desc = type === NodeType.Root
         ? ''
-        : type === Type.Element
+        : type === NodeType.Element
             ? node.tag
             : node.content
 
