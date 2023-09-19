@@ -1,9 +1,22 @@
+enum Type {
+    Root,
+    Element,
+    Text
+}
+
+interface Node {
+    type: Type,
+    tag?: string,
+    children?: Array<Node>,
+    content?: string
+}
+
 // 打印模板 AST 树
-export default function dump(node, indent = 0) {
+export default function dump(node: Node, indent: number = 0): void {
     const type = node.type
-    const desc = type === 'Root'
+    const desc = type === Type.Root
         ? ''
-        : type === 'Element'
+        : type === Type.Element
             ? node.tag
             : node.content
 
