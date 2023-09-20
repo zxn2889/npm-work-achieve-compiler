@@ -29,7 +29,7 @@ interface ParserAstTextNode {
 interface ParserAstElementNode {
     type: NodeType.Element,
     tag: HTMLElement,
-    children?: Array<ParserAstElementNode>
+    children?: Array<ASTChildren>
 }
 
 // 优化模板 AST

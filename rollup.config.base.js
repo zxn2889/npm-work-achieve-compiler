@@ -9,7 +9,7 @@ import { babel } from '@rollup/plugin-babel'
 const formatName = 'achieve'
 
 export default {
-    input: './src/index.js',
+    input: './src/index.ts',
     output: [
         {
             file: pkg.main,

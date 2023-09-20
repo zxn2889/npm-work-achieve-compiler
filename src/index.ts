@@ -1,5 +1,5 @@
-import { createParser } from './parser.js'
-import { createOptimizeParser, getCurrentContext } from './optimizeParser.js'
+import { createParser } from './parser'
+import { createOptimizeParser, getCurrentContext } from './optimizeParser'
 import { createGenerator } from './generator'
 import dump from './dump'
 
