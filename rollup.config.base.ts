@@ -28,9 +28,9 @@ export default {
     plugins: [
         json(),
         commonjs({ include: /node_modules/ }),
-        nodeResolve({ preferBuitins: true, main: true, brower: true }),
+        nodeResolve(),
         typescript(),
         eslint(),
-        babel({ exclude: 'node_modules/**' })
+        babel({ exclude: 'node_modules/**', extensions: ['.ts', '.js'] })
     ]
 }

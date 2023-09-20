@@ -14,8 +14,8 @@
     "index.d.ts"
   ],
   "scripts": {
-    "dev": "npx rollup -wc --bundleConfigAsCjs rollup.config.dev.js",
-    "build": "npx rollup -c --bundleConfigAsCjs rollup-config.js",
+    "dev": "npx rollup -wc --bundleConfigAsCjs rollup.config.dev.ts",
+    "build": "npx rollup -c --bundleConfigAsCjs rollup-config.ts",
     "build:types": "npx tsc"
   },
   "keywords": [
