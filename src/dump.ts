@@ -1,4 +1,4 @@
-import { NodeType } from './common'
+import { NodeType } from './public/common'
 
 interface Node {
     type: NodeType,

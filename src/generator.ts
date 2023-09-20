@@ -1,62 +1,31 @@
-enum JsNodeType {
-    FunctionDecl,
-    Identifier,
-    ReturnStatement,
-    CallExpression,
-    TagNode,
-    ArrayParamsNode,
-    Text,
-    Root
-}
-
-enum FunctionName {
-    Render = 'render',
-    H = 'h'
-}
-
-interface FunctionNameNode {
-    type: JsNodeType.Identifier,
-    name: FunctionName
-}
+import { NodeType } from "./public/common"
+import { HAstNode, FunctionNameNode } from './public/interface/hNode'
 
 interface FunctionBodyNode {
-    type: JsNodeType.ReturnStatement,
+    type: NodeType.ReturnStatement,
     return: HAstNode
 }
 
 interface RenderAstNode {
-    type: JsNodeType,
+    type: NodeType,
     id: FunctionNameNode,
     params: Array<[]>,
     body: Array<FunctionBodyNode>
 }
 
-interface HNodesNode {
-    type: JsNodeType,
-    name?: string,
-    params?: Array<HAstNode>,
-    context?: string
-}
-
-interface HAstNode {
-    type: JsNodeType.CallExpression,
-    id: FunctionNameNode,
-    nodes: Array<HNodesNode>
-}
-
 // 创建 render 函数
 function transformRender(ast: RenderAstNode): string {
-    if (ast.type !== JsNodeType.FunctionDecl) return
+    if (ast.type !== NodeType.FunctionDecl) return
     
     let render: string = ''
 
     // 设置函数关键字
-    if (ast.type === JsNodeType.FunctionDecl) {
+    if (ast.type === NodeType.FunctionDecl) {
         render += 'function'
     }
 
     // 设置函数名称
-    if (ast.id.type === JsNodeType.Identifier) {
+    if (ast.id.type === NodeType.Identifier) {
         render += ` ${ast.id.name}`
     }
 
@@ -70,7 +39,7 @@ function transformRender(ast: RenderAstNode): string {
     // 设置函数体
     if (ast.body.length) {
         if (ast.body.length === 1) {
-            if (ast.body[0].type === JsNodeType.ReturnStatement) {
+            if (ast.body[0].type === NodeType.ReturnStatement) {
                 render += `{ return ${transformH(ast.body[0].return)} }`
             }
         }
@@ -84,12 +53,12 @@ function transformRender(ast: RenderAstNode): string {
 
 // 创建要被调用的 h 函数
 function transformH(ast: HAstNode): string {
-    if (ast.type !== JsNodeType.CallExpression) return
+    if (ast.type !== NodeType.CallExpression) return
 
     let h: string = ''
 
     // 设置要调用的 h 函数名
-    if (ast.id.type === JsNodeType.Identifier) {
+    if (ast.id.type === NodeType.Identifier) {
         h += ast.id.name
     }
 
@@ -106,19 +75,19 @@ function transformH(ast: HAstNode): string {
                 const node = ast.nodes[i];
 
                 // 设置 h 函数的第一个参数-元素名
-                if (node.type === JsNodeType.TagNode) {
+                if (node.type === NodeType.TagNode) {
                     h += `('${node.name}'`
                 }
                 // 设置 h 函数的第二个参数
                 // 如果是数组则说明包含 h 函数，循环遍历
-                else if (node.type === JsNodeType.ArrayParamsNode) {
+                else if (node.type === NodeType.ArrayParamsNode) {
                     h += ', ['
 
                     // 如果数组有值，则递归调用 transformH 函数
                     if (node.params.length) {
                         for (let j = 0; j < node.params.length; j++) {
                             const jNode = node.params[j];
-                            if (jNode.type === JsNodeType.CallExpression) {
+                            if (jNode.type === NodeType.CallExpression) {
                                 h += `${transformH(jNode)}${j !== node.params.length - 1 ? ', ' : ''}`
                             }
                         }
@@ -126,7 +95,7 @@ function transformH(ast: HAstNode): string {
                     h += ']'
                 }
                 // 如果为文本节点，则直接作为第二个参数
-                else if (node.type === JsNodeType.Text) {
+                else if (node.type === NodeType.Text) {
                     h += `, ${node.context}`
                 }
             }
@@ -141,7 +110,7 @@ function transformH(ast: HAstNode): string {
 }
 
 interface AstNode {
-    type: JsNodeType.Root,
+    type: NodeType.Root,
     children: any,
     jsNode: RenderAstNode
 }
