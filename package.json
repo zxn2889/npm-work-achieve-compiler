@@ -6,7 +6,7 @@
   "jsnext:main": "lib/bundle.esm.js",
   "module": "lib/bundle.esm.js",
   "browser": "lib/bundle.browser.js",
-  "types": "./types/index.d.ts",
+  "typings": "./types/index.d.ts",
   "files": [
     "lib",
     "types"
