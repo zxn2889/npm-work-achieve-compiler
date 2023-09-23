@@ -1,0 +1,15 @@
+// 插件化模块配置
+{
+    "compilerOptions": {
+        "target": "es2016",                               // 生成目标文件的解析版本
+        "module": "commonjs",                             // 以哪种模块方式解析文件
+        "declaration": true,                              // 开启 declare 声明
+        "emitDeclarationOnly": true,                      // 仅生成 .d.ts 文件
+        "declarationDir": "types",                        // 生成的 .d.ts 文件存储目录
+        "esModuleInterop": true,                          // 完善 commonJs 等这种近 ES5 的编译生成文件中的两个漏洞
+        "resolveJsonModule": true,                        // 允许引入 .json 类型文件
+        "forceConsistentCasingInFileNames": true,         // 引入文件的文件名要和该文件的文件名相同
+        "strict": true,                                   // 开启严格模式
+        "skipLibCheck": true                              // 跳过 lib 审查，使用自匹配仓库
+    }
+}

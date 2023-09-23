@@ -6,12 +6,9 @@
   "jsnext:main": "lib/bundle.esm.js",
   "module": "lib/bundle.esm.js",
   "browser": "lib/bundle.browser.js",
-  "typings": "./index.d.ts",
   "files": [
-    "src",
     "lib",
-    "dist",
-    "index.d.ts"
+    "types"
   ],
   "scripts": {
     "dev": "npx rollup -wc --bundleConfigAsCjs rollup.config.dev.ts",
@@ -41,6 +38,7 @@
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-serve": "^2.0.2",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
   }
 }
