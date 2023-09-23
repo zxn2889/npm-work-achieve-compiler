@@ -1,6 +1,6 @@
 {
   "name": "@zxn2889/achieve-compiler",
-  "version": "0.0.3-0",
+  "version": "0.0.4-0",
   "description": "Implement a simple Vue compiler.",
   "main": "lib/bundle.cjs.js",
   "jsnext:main": "lib/bundle.esm.js",
